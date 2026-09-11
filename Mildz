@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Lamp Login</title>
+
+<style>
+
+/* ==================================================
+   RESET
+================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* ==================================================
+   BODY
+================================================== */
+
+body {
+
+    width: 100%;
+    min-height: 100vh;
+
+    overflow-x: hidden;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background:
+        radial-gradient(
+            circle at 50% 50%,
+            #1a1d21 0%,
+            #0d0f12 100%
+        );
+
+    transition:
+        background 0.8s ease;
+}
+
+
+/* ==================================================
+   BACKGROUND ON
+================================================== */
+
+body.lamp-on {
+
+    background:
+
+        radial-gradient(
+            circle at 37% 50%,
+            rgba(255,218,120,0.14),
+            transparent 27%
+        ),
+
+        radial-gradient(
+            circle at 50% 50%,
+            #1c1b18 0%,
+            #101214 68%,
+            #0b0d10 100%
+        );
+}
+
+
+/* ==================================================
+   FLOOR LIGHT
+================================================== */
+
+.floor-light {
+
+    position: fixed;
+
+    width: 500px;
+    height: 250px;
+
+    left: 5%;
+    top: 56%;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            ellipse,
+            rgba(255,216,120,0.17),
+            rgba(255,216,120,0.05) 35%,
+            transparent 72%
+        );
+
+    filter: blur(13px);
+
+    opacity: 0;
+
+    transform:
+        translateY(25px)
+        scale(0.85);
+
+    transition:
+        opacity 0.7s ease,
+        transform 0.7s ease;
+
+    pointer-events: none;
+}
+
+
+body.lamp-on .floor-light {
+
+    opacity: 1;
+
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+
+/* ==================================================
+   MAIN
+================================================== */
+
+.main-container {
+
+    position: relative;
+
+    width: 100%;
+
+    min-height: 100vh;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    /*
+       ลดระยะห่างจากเดิม
+    */
+
+    gap: clamp(25px, 4vw, 55px);
+
+    padding:
+        40px 25px;
+}
+
+
+/* ==================================================
+   LAMP AREA
+================================================== */
+
+.lamp-screen {
+
+    width: 400px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+}
+
+
+/* ==================================================
+   LAMP
+================================================== */
+
+.lamp {
+
+    /*
+       ใหญ่ขึ้นจากเดิม
+    */
+
+    width: 250px;
+    height: 350px;
+
+    position: relative;
+
+    cursor: pointer;
+
+    user-select: none;
+
+    transition:
+        transform 0.25s ease;
+}
+
+
+.lamp:hover {
+
+    transform:
+        translateY(-3px);
+}
+
+
+.lamp:active {
+
+    transform:
+        translateY(1px);
+}
+
+
+/* ==================================================
+   AURA
+================================================== */
+
+.lamp-aura {
+
+    position: absolute;
+
+    width: 320px;
+    height: 320px;
+
+    left: -35px;
+    top: -45px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,220,120,0.18),
+            rgba(255,220,120,0.06) 30%,
+            transparent 70%
+        );
+
+    filter: blur(12px);
+
+    opacity: 0;
+
+    transition:
+        opacity 0.5s ease;
+
+    pointer-events: none;
+}
+
+
+.lamp.on .lamp-aura {
+
+    opacity: 1;
+
+    animation:
+        lampGlow 2.3s ease-in-out infinite;
+}
+
+
+@keyframes lampGlow {
+
+    0%,
+    100% {
+
+        transform:
+            scale(0.96);
+
+        opacity: 0.75;
+    }
+
+    50% {
+
+        transform:
+            scale(1.06);
+
+        opacity: 1;
+    }
+}
+
+
+/* ==================================================
+   LIGHT BEAM
+================================================== */
+
+.light-beam {
+
+    position: absolute;
+
+    width: 225px;
+    height: 225px;
+
+    top: 85px;
+    left: 12px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,235,150,0.23),
+            rgba(255,220,100,0.05),
+            transparent
+        );
+
+    clip-path:
+        polygon(
+            30% 0%,
+            70% 0%,
+            100% 100%,
+            0% 100%
+        );
+
+    filter: blur(9px);
+
+    opacity: 0;
+
+    transition:
+        opacity 0.6s ease;
+
+    pointer-events: none;
+}
+
+
+.lamp.on .light-beam {
+
+    opacity: 1;
+}
+
+
+/* ==================================================
+   LAMP SHADE
+================================================== */
+
+.lamp-shade {
+
+    width: 160px;
+    height: 64px;
+
+    position: absolute;
+
+    top: 25px;
+    left: 45px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #f4f1e7,
+            #dcd8ca
+        );
+
+    border-radius:
+        75% 75% 25% 25%;
+
+    box-shadow:
+        0 3px 10px rgba(0,0,0,0.25);
+
+    transition:
+        background 0.35s ease,
+        box-shadow 0.5s ease;
+
+    z-index: 4;
+}
+
+
+/* ==================================================
+   SHADE ON
+================================================== */
+
+.lamp.on .lamp-shade {
+
+    background:
+        linear-gradient(
+            180deg,
+            #fffce5,
+            #f4e7a9
+        );
+
+    box-shadow:
+
+        0 0 15px
+        rgba(255,240,170,0.95),
+
+        0 0 35px
+        rgba(255,220,100,0.75),
+
+        0 0 70px
+        rgba(255,220,100,0.32),
+
+        0 0 110px
+        rgba(255,210,80,0.12);
+}
+
+
+/* ==================================================
+   POLE
+================================================== */
+
+.lamp-pole {
+
+    width: 10px;
+    height: 150px;
+
+    position: absolute;
+
+    top: 82px;
+    left: 120px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #c9c6ba,
+            #eeeade,
+            #c9c6ba
+        );
+
+    border-radius: 6px;
+
+    z-index: 3;
+}
+
+
+/* ==================================================
+   BASE
+================================================== */
+
+.lamp-base {
+
+    width: 120px;
+    height: 11px;
+
+    position: absolute;
+
+    top: 227px;
+    left: 65px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #f0eee4,
+            #c5c2b7
+        );
+
+    border-radius: 12px;
+
+    z-index: 5;
+}
+
+
+/* ==================================================
+   PULL STRING
+================================================== */
+
+.pull-string {
+
+    position: absolute;
+
+    /*
+       25 + 64 = 89
+       เริ่มพอดีใต้ขอบโคม
+    */
+
+    top: 89px;
+
+    /*
+       อยู่ด้านขวาของเสา
+    */
+
+    left: 164px;
+
+    width: 2px;
+
+    /*
+       ความยาวกำลังพอดี
+    */
+
+    height: 82px;
+
+    background:
+        #b5aa91;
+
+    transform-origin:
+        top center;
+
+    transition:
+        height 0.18s ease,
+        transform 0.15s ease;
+
+    z-index: 6;
+
+    cursor: pointer;
+}
+
+
+/* ==================================================
+   PULL BALL
+================================================== */
+
+.pull-string::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 17px;
+    height: 17px;
+
+    left: 50%;
+
+    bottom: -9px;
+
+    transform:
+        translateX(-50%);
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #ffe7a0,
+            #b78335
+        );
+
+    box-shadow:
+        0 2px 6px rgba(0,0,0,0.4);
+}
+
+
+/* ==================================================
+   PULL ANIMATION
+================================================== */
+
+.lamp.pulling .pull-string {
+
+    height: 88px;
+
+    transform:
+        translateY(4px);
+}
+
+
+/* ==================================================
+   LOGIN AREA
+================================================== */
+
+.login-screen {
+
+    width: 380px;
+
+    flex-shrink: 0;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transform:
+        translateX(-25px)
+        scale(0.96);
+
+    transition:
+        opacity 0.6s ease,
+        transform 0.6s ease,
+        visibility 0.6s ease;
+}
+
+
+.login-screen.active {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+
+    transform:
+        translateX(0)
+        scale(1);
+}
+
+
+/* ==================================================
+   LOGIN BOX
+================================================== */
+
+.login-box {
+
+    width: 380px;
+
+    padding: 34px;
+
+    background:
+        rgba(38,39,37,0.90);
+
+    border:
+        1px solid
+        rgba(255,255,255,0.08);
+
+    border-radius: 20px;
+
+    backdrop-filter:
+        blur(14px);
+
+    box-shadow:
+
+        0 28px 70px
+        rgba(0,0,0,0.48),
+
+        inset 0 1px 0
+        rgba(255,255,255,0.05);
+}
+
+
+/* ==================================================
+   TITLE
+================================================== */
+
+.login-box h2 {
+
+    text-align: center;
+
+    margin-bottom: 8px;
+
+    color: #fff;
+
+    font-size: 30px;
+}
+
+
+.subtitle {
+
+    text-align: center;
+
+    margin-bottom: 30px;
+
+    color: #888;
+
+    font-size: 12px;
+}
+
+
+/* ==================================================
+   LABEL
+================================================== */
+
+.login-box label {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #aaa;
+
+    font-size: 12px;
+}
+
+
+/* ==================================================
+   INPUT
+================================================== */
+
+.login-box input {
+
+    width: 100%;
+
+    padding: 14px 14px;
+
+    margin-bottom: 19px;
+
+    border:
+        1px solid
+        rgba(255,255,255,0.06);
+
+    outline: none;
+
+    border-radius: 9px;
+
+    background:
+        rgba(255,255,255,0.07);
+
+    color: white;
+
+    font-size: 14px;
+
+    transition:
+        background 0.3s ease,
+        border 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+
+.login-box input:focus {
+
+    background:
+        rgba(255,255,255,0.10);
+
+    border-color:
+        rgba(255,220,120,0.45);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(255,220,120,0.06);
+}
+
+
+.login-box input::placeholder {
+
+    color: #777;
+}
+
+
+/* ==================================================
+   BUTTON
+================================================== */
+
+.login-box button {
+
+    width: 100%;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 11px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #dfbd59,
+            #fff0a2,
+            #dfbd59
+        );
+
+    color: #222;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+
+.login-box button:hover {
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 8px 25px
+        rgba(255,220,120,0.28);
+}
+
+
+/* ==================================================
+   TABLET
+================================================== */
+
+@media (max-width: 1000px) and (min-width: 601px) {
+
+    .main-container {
+
+        gap: 20px;
+
+        padding:
+            30px 20px;
+    }
+
+
+    .lamp-screen {
+
+        width: 350px;
+    }
+
+
+    .lamp {
+
+        transform:
+            scale(0.92);
+    }
+
+
+    .login-screen,
+    .login-box {
+
+        width: 330px;
+    }
+
+
+    .login-box {
+
+        padding: 29px;
+    }
+
+
+    .login-box h2 {
+
+        font-size: 27px;
+    }
+}
+
+
+/* ==================================================
+   MOBILE
+================================================== */
+
+@media (max-width: 600px) {
+
+    body {
+
+        overflow-y: auto;
+    }
+
+
+    .main-container {
+
+        min-height: 100vh;
+
+        flex-direction: column;
+
+        gap: 5px;
+
+        padding:
+            28px 18px 40px;
+    }
+
+
+    .lamp-screen {
+
+        width: 100%;
+
+        height: 325px;
+    }
+
+
+    .lamp {
+
+        transform:
+            scale(0.95);
+    }
+
+
+    .lamp:hover {
+
+        transform:
+            scale(0.95)
+            translateY(-3px);
+    }
+
+
+    .login-screen {
+
+        width: 100%;
+
+        max-width: 380px;
+    }
+
+
+    .login-box {
+
+        width: 100%;
+
+        padding:
+            30px 25px;
+    }
+
+
+    .floor-light {
+
+        left: 50%;
+
+        top: 43%;
+
+        transform:
+            translateX(-50%)
+            translateY(25px)
+            scale(0.75);
+    }
+
+
+    body.lamp-on .floor-light {
+
+        transform:
+            translateX(-50%)
+            translateY(0)
+            scale(0.75);
+    }
+}
+
+
+/* ==================================================
+   SMALL PHONE
+================================================== */
+
+@media (max-width: 380px) {
+
+    .main-container {
+
+        padding:
+            20px 15px 30px;
+    }
+
+
+    .lamp-screen {
+
+        height: 300px;
+    }
+
+
+    .lamp {
+
+        transform:
+            scale(0.82);
+    }
+
+
+    .lamp:hover {
+
+        transform:
+            scale(0.82)
+            translateY(-3px);
+    }
+
+
+    .login-box {
+
+        padding:
+            24px 20px;
+    }
+
+
+    .login-box h2 {
+
+        font-size: 24px;
+    }
+
+
+    .login-box input {
+
+        padding: 12px;
+    }
+
+
+    .login-box button {
+
+        padding: 12px;
+    }
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="floor-light"></div>
+
+
+<div class="main-container">
+
+
+    <!-- ==================================================
+         LAMP
+    ================================================== -->
+
+    <div class="lamp-screen">
+
+        <div
+            class="lamp"
+            id="lamp"
+            tabindex="0"
+        >
+
+            <div class="lamp-aura"></div>
+
+            <div class="light-beam"></div>
+
+            <div class="lamp-shade"></div>
+
+            <div class="lamp-pole"></div>
+
+            <div class="lamp-base"></div>
+
+            <div class="pull-string"></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         LOGIN
+    ================================================== -->
+
+    <div
+        class="login-screen"
+        id="loginScreen"
+    >
+
+        <div class="login-box">
+
+            <h2>Welcome</h2>
+
+            <div class="subtitle">
+                Please sign in to continue
+            </div>
+
+
+            <label for="username">
+                Username
+            </label>
+
+            <input
+                id="username"
+                type="text"
+                placeholder="Enter name"
+                autocomplete="username"
+            >
+
+
+            <label for="password">
+                Password
+            </label>
+
+            <input
+                id="password"
+                type="password"
+                placeholder="Enter password"
+                autocomplete="current-password"
+            >
+
+
+            <button
+                type="button"
+                id="signInButton"
+            >
+                Sign In
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* ==================================================
+   ELEMENTS
+================================================== */
+
+const lamp =
+    document.getElementById("lamp");
+
+const loginScreen =
+    document.getElementById("loginScreen");
+
+const pullString =
+    document.querySelector(".pull-string");
+
+const username =
+    document.getElementById("username");
+
+const password =
+    document.getElementById("password");
+
+const signInButton =
+    document.getElementById("signInButton");
+
+
+/* ==================================================
+   LOGIN ACCOUNT
+================================================== */
+
+const correctUsername = "123";
+
+const correctPassword = "123";
+
+
+/* ==================================================
+   LAMP STATE
+================================================== */
+
+let lampOn = false;
+
+
+/* ==================================================
+   TOGGLE LAMP
+================================================== */
+
+function toggleLamp() {
+
+    lampOn = !lampOn;
+
+
+    if (lampOn) {
+
+        lamp.classList.add("on");
+
+        document.body.classList.add("lamp-on");
+
+        loginScreen.classList.add("active");
+
+    } else {
+
+        lamp.classList.remove("on");
+
+        document.body.classList.remove("lamp-on");
+
+        loginScreen.classList.remove("active");
+
+        username.value = "";
+
+        password.value = "";
+    }
+}
+
+
+/* ==================================================
+   CLICK LAMP
+================================================== */
+
+lamp.addEventListener(
+    "click",
+    function () {
+
+        toggleLamp();
+
+    }
+);
+
+
+/* ==================================================
+   PULL STRING
+================================================== */
+
+pullString.addEventListener(
+    "click",
+    function (event) {
+
+        event.stopPropagation();
+
+        lamp.classList.add("pulling");
+
+
+        setTimeout(
+            function () {
+
+                lamp.classList.remove("pulling");
+
+                toggleLamp();
+
+            },
+            150
+        );
+
+    }
+);
+
+
+/* ==================================================
+   KEYBOARD
+================================================== */
+
+lamp.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (
+            event.key === "Enter" ||
+            event.key === " "
+        ) {
+
+            event.preventDefault();
+
+            toggleLamp();
+
+        }
+
+    }
+);
+
+
+/* ==================================================
+   SIGN IN
+================================================== */
+
+signInButton.addEventListener(
+    "click",
+    function () {
+
+        const enteredUsername =
+            username.value.trim();
+
+        const enteredPassword =
+            password.value.trim();
+
+
+        if (
+            enteredUsername === correctUsername &&
+            enteredPassword === correctPassword
+        ) {
+
+            alert(
+                "เข้าสู่ระบบสำเร็จ 🎉"
+            );
+
+        } else {
+
+            alert(
+                "Username หรือ Password ไม่ถูกต้อง"
+            );
+
+        }
+
+    }
+);
+
+
+/* ==================================================
+   ENTER TO LOGIN
+================================================== */
+
+password.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (event.key === "Enter") {
+
+            signInButton.click();
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+
+</html>
